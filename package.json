@@ -8,7 +8,7 @@
     "bun-types": "latest",
     "@types/web": "^0.0.111"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "bin": {
     "newOperation": "./build/cli/newOperation.cli.js"
