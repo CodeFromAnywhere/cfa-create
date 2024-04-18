@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "type": "module",
+  "main": "build/index.js",
+  "description": "",
+  "scripts": { "build": "tsc" },
+  "license": "ISC",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

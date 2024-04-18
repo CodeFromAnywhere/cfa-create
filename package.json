@@ -1,0 +1,33 @@
+{
+  "name": "cfa-create",
+  "main": "build/index.js",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "@types/web": "^0.0.111"
+  },
+  "version": "0.0.2",
+  "description": "",
+  "bin": {
+    "newOperation": "./build/cli/newOperation.cli.js"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "dev": "npx tsc-watch --noClear --onSuccess 'npm run css'",
+    "css": "tailwindcss -o css.css",
+    "up": "npm version patch -f",
+    "pub": "npm run up && npm publish"
+  },
+  "license": "ISC",
+  "operation": {
+    "lastRebuildAt": 1713431153906,
+    "isBuildSuccessful": true
+  },
+  "dependencies": {
+    "ts-json-schema-generator": "^1.2.0",
+    "from-anywhere": "*"
+  },
+  "type": "module"
+}
