@@ -1,12 +1,12 @@
 import path from "node:path";
 import fsPromises from "node:fs/promises";
 import fs from "node:fs";
-import { canRead, executeCommandQuietUnlessFail, getProjectRoot, writeStringToFile, } from "from-anywhere/node";
+import { canRead, writeStringToFile } from "from-anywhere/node";
 import { getSrcRelativeFileId } from "from-anywhere/node";
 import { objectMapAsync } from "from-anywhere";
 import { setJsonKey } from "from-anywhere/node";
-import { projectRelativeGeneratedOperationsFolder } from "from-anywhere";
 import { newOperation } from "./newOperation.js";
+import { executeCommandQuietUnlessFail } from "./executeCommandQuietUnlessFail.js";
 /**
  * Creates a new operation with files with content
  *
@@ -21,14 +21,7 @@ export const newOperationWithFiles = async (name, description,
  * NB: relative paths must be relative to OPERATION ROOT, not src root!
  */
 srcFileContentObject, config) => {
-    // 1. calculates operation base path
-    const projectRoot = config?.manualProjectRoot || getProjectRoot();
-    if (!projectRoot) {
-        console.log("Not found projectroot", { type: "error" });
-        return;
-    }
-    const defaultDestinationPath = path.join(projectRoot, projectRelativeGeneratedOperationsFolder);
-    const destinationPath = config?.destinationPath || defaultDestinationPath;
+    const destinationPath = config?.destinationPath;
     // 2. calculate simplest index.ts (no exposure of merged types object or tests)
     const indexFileContent = Object.keys(srcFileContentObject)
         .map((operationRelativeTypescriptFilePath) => {
@@ -49,7 +42,6 @@ srcFileContentObject, config) => {
         name,
         destinationPath,
         description,
-        manualProjectRoot: projectRoot,
         type: config?.type,
     });
     if (!actualBasePath) {

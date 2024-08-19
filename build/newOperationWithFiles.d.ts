@@ -10,7 +10,7 @@ import { OperationClassification } from "from-anywhere/types";
  */
 export declare const newOperationWithFiles: (name: string, description: string | undefined, srcFileContentObject: {
     [operationRelativeTypescriptFilePath: string]: string;
-}, config?: {
+}, config: {
     type?: OperationClassification;
     manualProjectRoot?: string;
     /**
@@ -18,7 +18,7 @@ export declare const newOperationWithFiles: (name: string, description: string |
      *
      * if given, will place it here, otherwise, will place it in the default location (tools/generated for os projects, packages for bundled projects)
      */
-    destinationPath?: string;
+    destinationPath: string;
     /**
      * if true, overwrites the operation if it already exists. It does this in a way that it does not break the OS very long, because it removes the old one only after the new one has been created. The removal and renaming the new one to this target name happens almost instantaneously
      */

@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 import { operationClassificationConst } from "from-anywhere/types";
 import { newOperation } from "./newOperation.js";
 /**

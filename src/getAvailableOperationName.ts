@@ -1,7 +1,5 @@
 import path from "node:path";
 import fs from "node:fs";
-
-import { getOperationPath } from "from-anywhere/node";
 /**
  * returns folder name
  *
@@ -12,7 +10,6 @@ import { getOperationPath } from "from-anywhere/node";
 export const getAvailableOperationName = async (
   rootFolderPath: string,
   preferredFolderName: string,
-  manualProjectRoot?: string,
 ): Promise<string> => {
   //making sure we make a folder that doesn't exist yet:
   let n = 0;
@@ -23,17 +20,17 @@ export const getAvailableOperationName = async (
       path.join(rootFolderPath, availableFolderName),
     );
 
-    // TODO: Have cli provide operations object. everything is deemed available for now
-    const operations = {};
+    // // TODO: Have cli provide operations object. everything is deemed available for now
+    // const operations = {};
 
-    const operationAlreadyExists =
-      (await getOperationPath(availableFolderName, {
-        manualProjectRoot,
-        notUseSdk: !!manualProjectRoot,
-        operationPathsObject: operations,
-      })) !== undefined;
+    // const operationAlreadyExists =
+    //   (await getOperationPath(availableFolderName, {
+    //     manualProjectRoot,
+    //     notUseSdk: !!manualProjectRoot,
+    //     operationPathsObject: operations,
+    //   })) !== undefined;
 
-    if (!folderAlreadyExists && !operationAlreadyExists) break;
+    if (!folderAlreadyExists) break;
 
     n++;
     availableFolderName = `${preferredFolderName}${n}`;

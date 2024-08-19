@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 import { newTemplate } from "./newTemplate.js";
 
 /**

@@ -1,14 +1,17 @@
 // import { OperationClassification } from "from-anywhere/types";
 import { canRead } from "from-anywhere/node";
 import path from "node:path";
-import fsPromises from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.parse(__filename).dir;
 import fs from "node:fs";
+const fsPromises = fs.promises;
+
 import { setJsonKey } from "from-anywhere/node";
 import { renameTemplateFiles } from "from-anywhere/node";
 import { kebabCase } from "from-anywhere";
 import { StandardFunctionConfig } from "from-anywhere/types";
 import { getAvailableOperationName } from "./getAvailableOperationName.js";
-
 /**
  * # How to create a package/operation?
  *
@@ -33,27 +36,16 @@ export const newOperation = async (context: {
    * If not provided, uses the working directory from where the process was executed + an inferred foldername
    */
   destinationPath?: string;
-  /**
-   * folder path (including if given, uses this project root instead of the project root of the executed process
-   */
-  manualProjectRoot?: string;
 }): Promise<string | undefined> => {
+  const rootFolderPath = context.destinationPath || process.cwd();
+
   // NB: if we don't specify the type, create a node operation by default
   const type = context.type || "node-esm";
 
   const description = context.description;
-  const destinationPath = context.destinationPath;
-  const manualProjectRoot = context.manualProjectRoot;
   const folder = context.name ? kebabCase(context.name) : "untitled-operation";
-  const source = path.resolve(
-    import.meta.dir,
-    "..",
-    "..",
-    "assets",
-    "templates",
-    type,
-  );
-
+  const source = path.resolve(__dirname, "..", "assets", "templates", type);
+  console.log({ source });
   const templateExists = fs.existsSync(source);
 
   if (!templateExists) {
@@ -63,14 +55,9 @@ export const newOperation = async (context: {
     return;
   }
 
-  const rootFolderPath = destinationPath ? destinationPath : process.cwd();
-
-  console.log({ rootFolderPath });
-
   const availableFolderName = await getAvailableOperationName(
     rootFolderPath,
     folder,
-    manualProjectRoot,
   );
 
   const operationBasePath = path.join(rootFolderPath, availableFolderName);
@@ -78,7 +65,7 @@ export const newOperation = async (context: {
   // Make the non-existing folder
   await fsPromises.mkdir(operationBasePath, { recursive: true });
   // Copy the template inthere
-  await fsPromises.cp(source, operationBasePath, { recursive: true });
+  fs.cpSync(source, operationBasePath, { recursive: true });
   // Rename templatefiles if needed
   await renameTemplateFiles({ appDir: operationBasePath });
 

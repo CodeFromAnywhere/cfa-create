@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 /**
  *
  * Returns either the `basePath` of the created template, or undefined if something went wrong

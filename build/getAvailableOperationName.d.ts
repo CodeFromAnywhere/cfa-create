@@ -5,5 +5,5 @@
  *
  * there is also getAvailableFolderPath for non-operation folders
  */
-export declare const getAvailableOperationName: (rootFolderPath: string, preferredFolderName: string, manualProjectRoot?: string) => Promise<string>;
+export declare const getAvailableOperationName: (rootFolderPath: string, preferredFolderName: string) => Promise<string>;
 //# sourceMappingURL=getAvailableOperationName.d.ts.map

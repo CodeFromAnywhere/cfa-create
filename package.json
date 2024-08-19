@@ -11,7 +11,7 @@
   "version": "0.0.3",
   "description": "",
   "bin": {
-    "newOperation": "./build/cli/newOperation.cli.js"
+    "cfa-create": "./build/newOperation.cli.js"
   },
   "scripts": {
     "tsc": "tsc",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "ts-json-schema-generator": "^1.2.0",
-    "from-anywhere": "*"
+    "from-anywhere": "^0.0.29"
   },
   "type": "module"
 }

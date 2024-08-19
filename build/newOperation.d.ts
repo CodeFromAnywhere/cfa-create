@@ -22,10 +22,6 @@ export declare const newOperation: {
          * If not provided, uses the working directory from where the process was executed + an inferred foldername
          */
         destinationPath?: string;
-        /**
-         * folder path (including if given, uses this project root instead of the project root of the executed process
-         */
-        manualProjectRoot?: string;
     }): Promise<string | undefined>;
     config: {
         categories: string[];

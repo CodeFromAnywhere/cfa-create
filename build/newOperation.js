@@ -1,6 +1,9 @@
 // import { OperationClassification } from "from-anywhere/types";
 import { canRead } from "from-anywhere/node";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.parse(__filename).dir;
 import fsPromises from "node:fs/promises";
 import fs from "node:fs";
 import { setJsonKey } from "from-anywhere/node";
@@ -17,26 +20,24 @@ import { getAvailableOperationName } from "./getAvailableOperationName.js";
  *
  */
 export const newOperation = async (context) => {
+    const rootFolderPath = context.destinationPath || process.cwd();
     // NB: if we don't specify the type, create a node operation by default
     const type = context.type || "node-esm";
     const description = context.description;
-    const destinationPath = context.destinationPath;
-    const manualProjectRoot = context.manualProjectRoot;
     const folder = context.name ? kebabCase(context.name) : "untitled-operation";
-    const source = path.resolve(import.meta.dir, "..", "..", "assets", "templates", type);
+    const source = path.resolve(__dirname, "..", "assets", "templates", type);
+    console.log({ source });
     const templateExists = fs.existsSync(source);
     if (!templateExists) {
         console.log(`${type} operations cannot be generated yet. Create a template in assets/templates/${type}`);
         return;
     }
-    const rootFolderPath = destinationPath ? destinationPath : process.cwd();
-    console.log({ rootFolderPath });
-    const availableFolderName = await getAvailableOperationName(rootFolderPath, folder, manualProjectRoot);
+    const availableFolderName = await getAvailableOperationName(rootFolderPath, folder);
     const operationBasePath = path.join(rootFolderPath, availableFolderName);
     // Make the non-existing folder
     await fsPromises.mkdir(operationBasePath, { recursive: true });
     // Copy the template inthere
-    await fsPromises.cp(source, operationBasePath, { recursive: true });
+    fs.cpSync(source, operationBasePath, { recursive: true });
     // Rename templatefiles if needed
     await renameTemplateFiles({ appDir: operationBasePath });
     const packageJsonPath = path.join(operationBasePath, "package.json");

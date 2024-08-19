@@ -1,7 +1,7 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 import path from "node:path";
 import fs from "node:fs";
-import fsPromises from "node:fs/promises";
+const fsPromises = fs.promises;
 
 import { renameTemplateFiles } from "from-anywhere/node";
 import { getProjectRoot } from "from-anywhere/node";
@@ -50,7 +50,7 @@ export const newTemplate = async (
   // Make the non-existing folder
   await fsPromises.mkdir(basePath, { recursive: true });
   // Copy the template inthere
-  await fsPromises.cp(source, basePath, { recursive: true });
+  fs.cpSync(source, basePath, { recursive: true });
   // Rename templatefiles if needed
   await renameTemplateFiles({ appDir: basePath });
 

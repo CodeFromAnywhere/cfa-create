@@ -1,19 +1,15 @@
 import path from "node:path";
-import fsPromises from "node:fs/promises";
 import fs from "node:fs";
+const fsPromises = fs.promises;
 
-import {
-  canRead,
-  executeCommandQuietUnlessFail,
-  getProjectRoot,
-  writeStringToFile,
-} from "from-anywhere/node";
+import { canRead, getProjectRoot, writeStringToFile } from "from-anywhere/node";
 import { getSrcRelativeFileId } from "from-anywhere/node";
 import { objectMapAsync } from "from-anywhere";
 import { setJsonKey } from "from-anywhere/node";
 import { projectRelativeGeneratedOperationsFolder } from "from-anywhere";
 import { newOperation } from "./newOperation.js";
 import { OperationClassification } from "from-anywhere/types";
+import { executeCommandQuietUnlessFail } from "./executeCommandQuietUnlessFail.js";
 /**
  * Creates a new operation with files with content
  *
@@ -32,7 +28,7 @@ export const newOperationWithFiles = async (
   srcFileContentObject: {
     [operationRelativeTypescriptFilePath: string]: string;
   },
-  config?: {
+  config: {
     type?: OperationClassification;
     manualProjectRoot?: string;
     /**
@@ -40,7 +36,7 @@ export const newOperationWithFiles = async (
      *
      * if given, will place it here, otherwise, will place it in the default location (tools/generated for os projects, packages for bundled projects)
      */
-    destinationPath?: string;
+    destinationPath: string;
     /**
      * if true, overwrites the operation if it already exists. It does this in a way that it does not break the OS very long, because it removes the old one only after the new one has been created. The removal and renaming the new one to this target name happens almost instantaneously
      */
@@ -57,20 +53,7 @@ export const newOperationWithFiles = async (
     dryrun?: boolean;
   },
 ): Promise<undefined | string> => {
-  // 1. calculates operation base path
-  const projectRoot = config?.manualProjectRoot || getProjectRoot();
-  if (!projectRoot) {
-    console.log("Not found projectroot", { type: "error" });
-    return;
-  }
-
-  const defaultDestinationPath = path.join(
-    projectRoot,
-    projectRelativeGeneratedOperationsFolder,
-  );
-
-  const destinationPath = config?.destinationPath || defaultDestinationPath;
-
+  const destinationPath = config?.destinationPath;
   // 2. calculate simplest index.ts (no exposure of merged types object or tests)
   const indexFileContent = Object.keys(srcFileContentObject)
     .map((operationRelativeTypescriptFilePath) => {
@@ -114,7 +97,6 @@ export const newOperationWithFiles = async (
     name,
     destinationPath,
     description,
-    manualProjectRoot: projectRoot,
     type: config?.type,
   });
 
